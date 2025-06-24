@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import { generatePDF } from "../services/pdf.service";
+import { generate_pdf } from "../services/pdf.service";
 import { ValidationError } from "../packages/error-handlers/index";
 
 /**
  * Handles HTTP requests to generate a receipt PDF.
  *
  * This function extracts receipt data from the request body, validates the
- * presence of required fields, and generates a PDF receipt using the `generatePDF`
+ * presence of required fields, and generates a PDF receipt using the `generate_pdf`
  * service. The generated PDF is sent back to the client as an attachment.
  *
  * @param req - The express Request object containing the receipt data in the body.
@@ -29,7 +29,7 @@ export const generate_receipt = async (
     }
 
     const receiptData = { receiptId, payerName, amount, currency, paymentDate };
-    const pdfBuffer = await generatePDF(receiptData);
+    const pdfBuffer = await generate_pdf(receiptData);
 
     res.set({
       "Content-Type": "application/pdf",

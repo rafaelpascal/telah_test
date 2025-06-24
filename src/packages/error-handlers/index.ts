@@ -25,24 +25,10 @@ export class AppError extends Error {
   }
 }
 
-// Notfound Error
-export class NotFoundError extends AppError {
-  constructor(message = "Resource not found") {
-    super(404, message);
-  }
-}
-
 // Validation Error (use for joi/zod/react-hook-form validation error)
 export class ValidationError extends AppError {
   constructor(message = "Invalid request data", details?: any) {
     super(400, message, true, details);
-  }
-}
-
-// Forbiden error
-export class ForbidenError extends AppError {
-  constructor(message = "Forbidden Resource") {
-    super(403, message);
   }
 }
 

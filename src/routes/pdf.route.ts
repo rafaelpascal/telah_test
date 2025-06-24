@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { generate_receipt } from "../controls/controls";
+import { generate_receipt } from "../controls/receipt.controller";
 
 const router: Router = express.Router();
 

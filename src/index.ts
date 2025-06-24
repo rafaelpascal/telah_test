@@ -3,13 +3,12 @@ import cors from "cors";
 import { errorMiddleware } from "./packages/error-handlers/error-middleware";
 import cookieParser from "cookie-parser";
 import router from "./routes/pdf.route";
-import rateLimit from "express-rate-limit";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./swagger-output.json" assert { type: "json" };
 import { config } from "dotenv";
+import { limiter } from "./utils/helpers";
 config();
-
 const app = express();
 
 app.use(
@@ -26,16 +25,6 @@ app.use(cookieParser());
 app.set("trust proxy", 1);
 
 // Apply Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 1,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { error: "Too many requests, please try again later." },
-  handler: (req, res) => {
-    res.status(429).json({ error: "Too many requests. Slow down!" });
-  },
-});
 app.use(limiter);
 
 app.get("/", (req, res) => {
