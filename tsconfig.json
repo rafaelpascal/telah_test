@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",                   // Modern JS target
+    "module": "esnext",                   // ESM output
+    "moduleResolution": "node",           // Use Node-style module resolution
+    "outDir": "./dist",                   // Output directory
+    "rootDir": "src",                 // Source directory
+    "strict": true,                       // Enable all strict type-checking options
+    "esModuleInterop": true,              // Allow default imports from CJS modules
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,                 // Speeds up builds by skipping .d.ts checks
+    "resolveJsonModule": true,            // Allow importing JSON
+    "allowSyntheticDefaultImports": true  // Useful for default imports like express
+  },
+  "include": ["src", "packages"],
+  "exclude": ["node_modules", "dist"]
+}

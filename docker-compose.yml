@@ -1,0 +1,21 @@
+# version: '3'
+# services:
+#   app:
+#     build: .
+#     ports:
+#       - "6001:6001"
+#     volumes:
+#       - .:/app
+#       - /app/node_modules
+#     command: npm run dev
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - "6001:6001"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    working_dir: /app
+    command: npm run dev
