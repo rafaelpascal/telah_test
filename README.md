@@ -15,6 +15,15 @@ This service generates PDF receipts with embedded QR codes via a REST API.
 
 ### 1. Install dependencies
 
-```bash
+````bash
 npm install
-```
+
+### 1. Run the app
+
+```bash
+npm run dev
+
+### 1. Run with Docker
+```bash
+docker-compose up --build
+````

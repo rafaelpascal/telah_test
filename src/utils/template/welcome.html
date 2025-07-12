@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to Agrify</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;700&display=swap");
+
+      * {
+        font-family: "Red Hat Display", sans-serif;
+      }
+
+      .top {
+        border-radius: 8px;
+        background: #053a51;
+        width: 840px;
+        height: 100px;
+        color: #ffffff;
+      }
+
+      .top h1 {
+        font-family: "Red Hat Display";
+        font-style: normal;
+        font-weight: 700;
+        font-size: 42px;
+        line-height: 50px;
+        color: #ffffff;
+        text-align: center;
+      }
+
+      .img {
+        width: 450px;
+        height: 250px;
+        margin: 40px auto;
+      }
+
+      td.center {
+        text-align: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <table style="margin-top: 30px" width="100%">
+      <tr>
+        <td width="20%"></td>
+        <td width="60%">
+          <table>
+            <tr>
+              <td class="top">
+                <h1>Appmart Bulk Messaging services</h1>
+              </td>
+            </tr>
+            <tr>
+              <td class="center">
+                <img
+                  class="img"
+                  src="https://res.cloudinary.com/dnbbhvcbt/image/upload/v1672910767/pencom/welcome_klwzkd.png"
+                  alt="illustration"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td class="center">
+                <table width="100%">
+                  <tr>
+                    <td
+                      class="center"
+                      style="
+                        font-weight: 700;
+                        font-size: 20px;
+                        line-height: 26px;
+                        color: #252a2f;
+                      "
+                    >
+                      Hello, {{name}} 👋
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      class="center"
+                      style="font-size: 20px; line-height: 26px; color: #5e6974"
+                    >
+                      Welcome to Appmart Bulk Messaging services
+                      <br />
+                      Use the token below to verify your account. This token is
+                      valid for 5 minutes only.
+                      <br />
+                      <p></p>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td style="height: auto">
+                      <div
+                        style="
+                          display: block;
+                          -moz-box-sizing: border-box;
+                          box-sizing: border-box;
+                          width: 100%;
+                          height: auto;
+                          background: #053a51;
+                          border-radius: 8px;
+                          line-height: 26px;
+                          color: #ffffff;
+                          margin: auto;
+                          text-decoration: none;
+                          text-align: left;
+                          padding: 10px;
+                          margin-bottom: 20px;
+                        "
+                      >
+                        <span style="font-size: 14px; font-weight: 300"
+                          >Token: {{token}}
+                        </span>
+                        <br />
+                        <span style="font-size: 14px; font-weight: 300"
+                          >Expires on: {{expiry}}
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                style="
+                  width: 840px;
+                  height: 45px;
+                  background: #f6f6f6;
+                  border-radius: 8px;
+                "
+              >
+                <p
+                  style="
+                    margin: 5px 0;
+                    text-align: center;
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 19px;
+                    color: #252a2f;
+                  "
+                >
+                  © {{year}}
+                  <a
+                    href="https://nicetel.com.ng/"
+                    target="_blank"
+                    style="color: #006dda; margin-left: 5px"
+                  >
+                    Appmart
+                  </a>
+                  - All Rights Reserved
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td width="20%"></td>
+      </tr>
+    </table>
+  </body>
+</html>

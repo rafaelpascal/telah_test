@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import { errorMiddleware } from "./packages/error-handlers/error-middleware";
 import cookieParser from "cookie-parser";
-import router from "./routes/pdf.route";
+import router from "./routes/auth.route";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./swagger-output.json" assert { type: "json" };
