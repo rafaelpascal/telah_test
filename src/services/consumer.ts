@@ -11,29 +11,14 @@ const ROUTING_KEY =
   "imdqKn26vi5SNAZI1l9PsePPMRGOcaWFHOFLG4wsXlkvryYMMU1VKKMD3LYjVnMYCwSmSMAK5ZNhCynfoIlBxgiGTf6XclsNPyBVGkWdLlDi6VGSgyGsfbAHqG8QL4da90dnC9x9kZQ4uUdKuKreWGWix9lelb9klVnW6IHMBHnsibHvkxKTsGE7vpoOh7wauuWdIIJOEwtaUoQOhnfAtOSPn7w7uyg3EJpXLl9oLqTLRvFktMIgad9nfonl8aX";
 
 export const consumeMessage = async () => {
-  console.log("🚀 Starting to consume messages...");
-
   try {
     const connection = await amqp.connect(RABBITMQ_URL);
-    console.log("📡 Connected to RabbitMQ");
-
     const channel: Channel = await connection.createChannel();
-    console.log("📦 Channel created");
-
     await channel.assertExchange(EXCHANGE_NAME, "direct", { durable: true });
-    console.log(`✅ Exchange '${EXCHANGE_NAME}' asserted`);
-
     const { queue } = await channel.assertQueue(QUEUE_NAME, { durable: true });
-    console.log(`📥 Queue '${queue}' asserted`);
-
     await channel.bindQueue(queue, EXCHANGE_NAME, ROUTING_KEY);
-    console.log(
-      `🔗 Queue '${queue}' bound to exchange '${EXCHANGE_NAME}' with routing key '${ROUTING_KEY}'`
-    );
-
     await channel.consume(queue, async (msg: ConsumeMessage | null) => {
       if (msg) {
-        console.log("📨 Message received", msg);
         try {
           const data: EmailMessagePayload = JSON.parse(msg.content.toString());
 
@@ -99,8 +84,6 @@ export const consumeMessage = async () => {
         console.log("⚠️ No message received");
       }
     });
-
-    console.log("👂 Waiting for messages...");
   } catch (error) {
     console.error("❌ Error in consumeMessage:", error);
   }

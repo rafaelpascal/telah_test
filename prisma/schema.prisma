@@ -27,3 +27,12 @@ model mailToken {
   expiresIn   Int
   scope       String?
 }
+
+model messageReport {
+  id           String   @id @default(cuid()) @map("_id")
+  sender       String
+  recipient    String
+  send_message String
+  status       String
+  createdAt    DateTime @default(now())
+}

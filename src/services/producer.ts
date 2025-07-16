@@ -7,7 +7,6 @@ interface LogDetails {
   window: string;
   dateTime: Date;
 }
-console.log("💬 [Producer] publishMessage called");
 export class Producer {
   private channel: amqp.Channel | undefined;
   private readonly EXCHANGE_NAME = "emailExchange";

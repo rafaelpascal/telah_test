@@ -3,6 +3,7 @@ import FormData from "form-data";
 import qs from "qs";
 import dotenv from "dotenv";
 import prisma from "../../packages/libs/prisma";
+import { saveMessageReport } from "../message.helper";
 
 dotenv.config({ path: "../../.env" });
 
@@ -96,11 +97,24 @@ export const sendEmail = async (
   message: string | undefined,
   subject: string
 ): Promise<string | false | { success: boolean; message: string }> => {
+  console.log(
+    "Sending email to:",
+    email,
+    "with subject:",
+    subject,
+    "and message:",
+    message
+  );
+
   try {
     const accessToken = await getToken();
-    console.log("gggggggg");
-
     if (!accessToken) {
+      await saveMessageReport({
+        sender: "Revotax",
+        recipient: email,
+        send_message: subject,
+        status: "FAILED",
+      });
       return {
         success: false,
         message: "Failed to retrieve Access Token.",
@@ -130,6 +144,13 @@ export const sendEmail = async (
     };
 
     const response = await axios(config);
+    await saveMessageReport({
+      sender: "Revotax",
+      recipient: email,
+      send_message: subject,
+      status: "SUCCESS",
+    });
+    console.log("Email sent successfully:", response.data);
     return response.data.message;
   } catch (error: any) {
     console.error(

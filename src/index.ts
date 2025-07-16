@@ -55,7 +55,7 @@ app.use(
 const port = process.env.PORT || 3000;
 
 const server = app.listen(port, async () => {
-  // await consumeMessage();
+  await consumeMessage();
   console.log(`Listening at http://localhost:${port}/api`);
 });
 server.on("error", console.error);

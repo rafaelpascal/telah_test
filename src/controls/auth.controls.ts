@@ -6,7 +6,6 @@ import {
 import prisma from "../packages/libs/prisma";
 import {
   checkOtpRegistrations,
-  emailRegex,
   sendOtp,
   trackOtpRequest,
   validateRegistrationData,
