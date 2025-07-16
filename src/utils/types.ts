@@ -13,10 +13,20 @@ export interface SingleEmailData {
   window: string;
 }
 
+// export interface EmailMessagePayload {
+//   message: SingleEmailData[];
+//   batch: string;
+//   window: string;
+// }
+
 export interface EmailMessagePayload {
-  message: SingleEmailData[];
+  message: {
+    email: string;
+    name: string;
+  }[];
   batch: string;
   window: string;
+  html?: string; // ✅ add this line
 }
 
 export interface EmailJob {

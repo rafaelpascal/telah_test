@@ -21,26 +21,29 @@ export const consumeMessage = async () => {
       if (msg) {
         try {
           const data: EmailMessagePayload = JSON.parse(msg.content.toString());
-
+          const htmlTemplate = data.html;
+          if (!htmlTemplate || typeof htmlTemplate !== "string") {
+            console.error("❌ Invalid or missing HTML template in message!");
+            channel.ack(msg);
+            return;
+          }
           if (Array.isArray(data.message)) {
             let allSent = true;
 
-            const extractedData = data.message.map(
-              ({ email, name, batch, window }) => ({
-                email,
-                name,
-                batch,
-                window,
-              })
-            );
+            const newbatch = data.batch;
+            const newwindow = data.window;
+
+            const extractedData = data.message.map(({ email, name }) => ({
+              email,
+              name,
+              batch: newbatch,
+              window: newwindow,
+            }));
 
             for (const item of extractedData) {
               const mailData = { name: item.name };
               try {
-                const message = EmailTemplateData(
-                  "revotaxresume.html",
-                  mailData
-                );
+                const message = EmailTemplateData(htmlTemplate, mailData);
                 const subject = `Revotax`;
                 const res = await sendEmail(item.email, message, subject);
                 if (!res) allSent = false;

@@ -6,6 +6,7 @@ interface LogDetails {
   batch: string;
   window: string;
   dateTime: Date;
+  html?: string;
 }
 export class Producer {
   private channel: amqp.Channel | undefined;
@@ -34,7 +35,8 @@ export class Producer {
     routingKey: string,
     message: any,
     batch: string,
-    window: string
+    window: string,
+    html?: string
   ): Promise<void> {
     if (!this.channel) {
       await this.createChannel();
@@ -50,6 +52,7 @@ export class Producer {
       message,
       batch,
       window,
+      html,
       dateTime: new Date(),
     };
 
