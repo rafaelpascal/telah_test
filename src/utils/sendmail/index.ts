@@ -98,6 +98,8 @@ export const sendEmail = async (
 ): Promise<string | false | { success: boolean; message: string }> => {
   try {
     const accessToken = await getToken();
+    console.log("gggggggg");
+
     if (!accessToken) {
       return {
         success: false,

@@ -3,17 +3,19 @@ import cors from "cors";
 import { errorMiddleware } from "./packages/error-handlers/error-middleware";
 import cookieParser from "cookie-parser";
 import router from "./routes/auth.route";
+import message_router from "./routes/message.route";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./swagger-output.json" assert { type: "json" };
 import { config } from "dotenv";
 import { limiter } from "./utils/helpers";
+import { consumeMessage } from "./services/consumer";
 config();
 const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:3001"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
@@ -37,6 +39,7 @@ app.get("/api-docs.json", (req, res) => {
 });
 
 app.use("/api", router);
+app.use("/api/message", message_router);
 
 app.use(
   (
@@ -51,7 +54,8 @@ app.use(
 
 const port = process.env.PORT || 3000;
 
-const server = app.listen(port, () => {
+const server = app.listen(port, async () => {
+  // await consumeMessage();
   console.log(`Listening at http://localhost:${port}/api`);
 });
 server.on("error", console.error);

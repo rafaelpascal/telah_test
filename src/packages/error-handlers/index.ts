@@ -38,3 +38,10 @@ export class RateLimitError extends AppError {
     super(429, message);
   }
 }
+
+// Authentication error
+export class AuthenticationError extends AppError {
+  constructor(message = "Authentication failed") {
+    super(401, message);
+  }
+}

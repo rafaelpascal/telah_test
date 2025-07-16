@@ -11,6 +11,8 @@ const doc = {
 };
 
 const outputFile = "./swagger-output.json";
-const endpointsFiles = ["./routes/auth.route.ts"];
+
+// ✅ Add multiple route files here
+const endpointsFiles = ["./routes/auth.route.ts", "./routes/message.route.ts"];
 
 swaggerAutogen()(outputFile, endpointsFiles, doc);

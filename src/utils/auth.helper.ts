@@ -19,7 +19,7 @@ interface TokenData {
   expirationDate: Date;
 }
 
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const generaeToken = async (): Promise<TokenData> => {
   const tokenExpirationString = await getSettingValue("tokenexpiration");
@@ -96,23 +96,27 @@ export const sendOtp = async (
   email: string,
   template: string
 ) => {
-  const { token, expirationDate } = await generaeToken();
+  try {
+    const { token, expirationDate } = await generaeToken();
 
-  const expirydateTime = new Date(expirationDate);
+    const expirydateTime = new Date(expirationDate);
 
-  // Prepare and send email with the token
-  const mailData = {
-    token,
-    name: `${name}`,
-    expiry: `${expirydateTime}`,
-    year: new Date().getFullYear(),
-  };
+    // Prepare and send email with the token
+    const mailData = {
+      token,
+      name: `${name}`,
+      expiry: `${expirydateTime}`,
+      year: new Date().getFullYear(),
+    };
 
-  const message = EmailTemplateData(template, mailData);
-  const subject = `Verify Your Email`;
-  await sendEmail(email, message, subject);
-  await redis.set(`otp:${email}`, token, "EX", 300);
-  await redis.set(`otp_cooldown: ${email}`, "true", "EX", 60);
+    const message = EmailTemplateData(template, mailData);
+    const subject = `Verify Your Email`;
+    await sendEmail(email, message, subject);
+    await redis.set(`otp:${email}`, token, "EX", 300);
+    await redis.set(`otp_cooldown: ${email}`, "true", "EX", 60);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const verifyOtp = async (

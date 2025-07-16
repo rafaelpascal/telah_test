@@ -5,3 +5,23 @@ export interface ReceiptData {
   currency: string;
   paymentDate: string;
 }
+
+export interface SingleEmailData {
+  email: string;
+  name: string;
+  batch: string;
+  window: string;
+}
+
+export interface EmailMessagePayload {
+  message: SingleEmailData[];
+  batch: string;
+  window: string;
+}
+
+export interface EmailJob {
+  email: string;
+  name: string;
+  batch: string;
+  window: string;
+}
