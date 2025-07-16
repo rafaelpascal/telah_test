@@ -9,7 +9,6 @@ export const errorMiddleware = (
 ) => {
   if (err instanceof AppError) {
     console.log(`Error Middleware ${req.method} ${req.url} - ${err.message}`);
-    // Operational error
     return res.status(err.statusCode).json({
       status: "error",
       message: err.message,

@@ -16,9 +16,7 @@ export class Producer {
   private async createChannel(): Promise<void> {
     try {
       const connection = await amqp.connect(this.RABBITMQ_URL);
-      console.log("📡 Connected to RabbitMQ");
       this.channel = await connection.createChannel();
-      console.log("🔄 Channel created");
 
       await this.channel.assertExchange(
         this.EXCHANGE_NAME,
@@ -27,7 +25,6 @@ export class Producer {
           durable: true,
         }
       );
-      console.log(`✅ Exchange '${this.EXCHANGE_NAME}' asserted`);
     } catch (error) {
       console.error("❌ RabbitMQ Channel Creation Error:", error);
     }
@@ -35,7 +32,7 @@ export class Producer {
 
   public async publishMessage(
     routingKey: string,
-    message: any, // you can replace `any` with a specific message type
+    message: any,
     batch: string,
     window: string
   ): Promise<void> {

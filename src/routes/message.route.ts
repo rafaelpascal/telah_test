@@ -5,12 +5,13 @@ import {
   getallReport,
 } from "../controls/message.controls";
 import multer from "multer";
-const upload = multer({ dest: "uploads/" });
+import { authenticate } from "../packages/middlewares/authenticate";
+const upload = multer({ storage: multer.memoryStorage() });
 
 const router: Router = express.Router();
 
-router.post("/user-send-email", upload.single("file"), sendEmail);
+router.post("/user-send-email", authenticate, upload.single("file"), sendEmail);
 router.post("/save-report", saveReport);
-router.post("/message-reports", getallReport);
+router.get("/message-reports", authenticate, getallReport);
 
 export default router;

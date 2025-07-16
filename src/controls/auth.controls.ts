@@ -30,9 +30,7 @@ export const userRegistration = async (
 
     await checkOtpRegistrations(email, next);
     await trackOtpRequest(email, next);
-    const otpsent = await sendOtp(name, email, "welcome.html");
-    console.log(otpsent);
-
+    await sendOtp(name, email, "welcome.html");
     res.status(200).json({
       message: "OTP sent to email. please verify your account.",
     });

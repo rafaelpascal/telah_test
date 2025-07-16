@@ -97,15 +97,6 @@ export const sendEmail = async (
   message: string | undefined,
   subject: string
 ): Promise<string | false | { success: boolean; message: string }> => {
-  console.log(
-    "Sending email to:",
-    email,
-    "with subject:",
-    subject,
-    "and message:",
-    message
-  );
-
   try {
     const accessToken = await getToken();
     if (!accessToken) {
@@ -150,7 +141,6 @@ export const sendEmail = async (
       send_message: subject,
       status: "SUCCESS",
     });
-    console.log("Email sent successfully:", response.data);
     return response.data.message;
   } catch (error: any) {
     console.error(

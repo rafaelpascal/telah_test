@@ -2,7 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import fs from "fs";
 import { Producer } from "../services/producer";
 import { excelToJson } from "../services/exceltojson";
-import { ValidationError } from "../packages/error-handlers";
+import {
+  AuthenticationError,
+  ValidationError,
+} from "../packages/error-handlers";
 import prisma from "../packages/libs/prisma";
 
 /**
@@ -20,17 +23,25 @@ export const sendEmail = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const filePath = (req as Request & { file?: Express.Multer.File }).file
-      ?.path;
-    if (!filePath) {
+    const fileBuffer = (req as Request & { file?: Express.Multer.File }).file
+      ?.buffer;
+
+    if (!fileBuffer) {
       return next(
-        new ValidationError(
-          "Select the an excel file to with the proper format!"
+        new ValidationError("Select an Excel file with the proper format!")
+      );
+    }
+
+    const userId = (req as any).user?.id;
+    if (!userId) {
+      return next(
+        new AuthenticationError(
+          "Forbidden: You are not authorized to access this resource!"
         )
       );
     }
 
-    const jsonResult = excelToJson(filePath);
+    const jsonResult = excelToJson(fileBuffer);
     fs.writeFileSync(
       "output.json",
       JSON.stringify(jsonResult, null, 2),
@@ -91,6 +102,14 @@ export const saveReport = async (
     if (!sender || !recipient || !send_message || !status) {
       new ValidationError("Missing required fields!");
     }
+    const userId = (req as any).user?.id;
+    if (!userId) {
+      return next(
+        new AuthenticationError(
+          "Forbidden: You are not authorized to access this resource!"
+        )
+      );
+    }
     const report = await prisma.messageReport.create({
       data: {
         sender,
@@ -106,12 +125,37 @@ export const saveReport = async (
   }
 };
 
+/**
+ * Retrieves all message reports from the database.
+ *
+ * This function checks for user authorization and fetches all message reports
+ * from the database. If the user is not authorized, it returns an authentication
+ * error. If the operation is successful, it responds with an array of message
+ * reports.
+ *
+ * @param req - The HTTP request object containing user information.
+ * @param res - The HTTP response object used to send back the reports.
+ * @param next - The next middleware function for error handling.
+ * @returns A promise that resolves to nothing.
+ *
+ * Throws an AuthenticationError if the user is not authorized.
+ */
+
 export const getallReport = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
+    const userId = (req as any).user?.id;
+    if (!userId) {
+      return next(
+        new AuthenticationError(
+          "Forbidden: You are not authorized to access this resource!"
+        )
+      );
+    }
+
     const reports = await prisma.messageReport.findMany({});
     res.status(200).json({ success: true, data: reports });
   } catch (error: any) {
