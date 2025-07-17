@@ -22,8 +22,19 @@ export const consumeMessage = async () => {
         try {
           const data: EmailMessagePayload = JSON.parse(msg.content.toString());
           const htmlTemplate = data.html;
+          const completedHtmlTemplate = data.completedhtml;
           if (!htmlTemplate || typeof htmlTemplate !== "string") {
             console.error("❌ Invalid or missing HTML template in message!");
+            channel.ack(msg);
+            return;
+          }
+          if (
+            !completedHtmlTemplate ||
+            typeof completedHtmlTemplate !== "string"
+          ) {
+            console.error(
+              "❌ Invalid or missing completed HTML template in message!"
+            );
             channel.ack(msg);
             return;
           }
@@ -32,6 +43,8 @@ export const consumeMessage = async () => {
 
             const newbatch = data.batch;
             const newwindow = data.window;
+            const user_name = data.user.name;
+            const user_email = data.user.email;
 
             const extractedData = data.message.map(({ email, name }) => ({
               email,
@@ -58,14 +71,17 @@ export const consumeMessage = async () => {
               const window = data.window;
 
               const mailData = {
-                name: "Anthony Umejiofor",
+                name: user_name,
                 batch: `${batch}`,
                 count: `${window}`,
               };
 
-              const message = EmailTemplateData("completed.html", mailData);
-              const subject = `Eid Mubarak`;
-              const email = "raphael.emehelu@appmartgroup.com";
+              const message = EmailTemplateData(
+                completedHtmlTemplate,
+                mailData
+              );
+              const subject = `Completion Notification`;
+              const email = user_email;
 
               try {
                 await sendEmail(email, message, subject);

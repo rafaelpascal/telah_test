@@ -10,23 +10,23 @@ interface EmailTemplateData {
   [key: string]: any;
 }
 
-// export const EmailTemplateData = (
-//   templateName: string,
-//   data: EmailTemplateData
-// ): string | undefined => {
-//   try {
-//     const templatePath: string = path.join(
-//       __dirname,
-//       `../template/${templateName}`
-//     );
-//     const content: string = fs.readFileSync(templatePath, "utf-8");
-//     const output: string = mustache.render(content, data);
-//     return output;
-//   } catch (error) {
-//     console.log({ error });
-//     return;
-//   }
-// };
+export const TemplateData = (
+  templateName: string,
+  data: EmailTemplateData
+): string | undefined => {
+  try {
+    const templatePath: string = path.join(
+      __dirname,
+      `../template/${templateName}`
+    );
+    const content: string = fs.readFileSync(templatePath, "utf-8");
+    const output: string = mustache.render(content, data);
+    return output;
+  } catch (error) {
+    console.log({ error });
+    return;
+  }
+};
 
 export const EmailTemplateData = (html: string, data: Record<string, any>) => {
   return mustache.render(html, data); // supports {{name}}, {{batch}}, etc.

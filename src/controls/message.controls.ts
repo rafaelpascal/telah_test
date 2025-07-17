@@ -92,34 +92,36 @@ export const sendEmail = async (
 ): Promise<void> => {
   try {
     const files = req.files as {
-      excel?: Express.Multer.File[];
-      html?: Express.Multer.File[];
+      excel: Express.Multer.File[];
+      html: Express.Multer.File[];
+      completedhtml: Express.Multer.File[];
     };
 
     const excelFile = files?.excel?.[0];
     const htmlFile = files?.html?.[0];
+    const completedHtmlFile = files?.completedhtml?.[0];
 
     if (!excelFile?.buffer) {
       return next(new ValidationError("Please upload a valid Excel file!"));
     }
 
-    if (!htmlFile?.buffer) {
+    if (!excelFile?.buffer) {
+      return next(new ValidationError("Please upload a valid Excel file!"));
+    }
+
+    if (!completedHtmlFile?.buffer) {
       return next(new ValidationError("Please upload a valid HTML file!"));
     }
 
-    const userId = (req as any).user?.id;
-    if (!userId) {
+    const user = (req as any).user;
+
+    if (!user?.id) {
       return next(new AuthenticationError("Unauthorized user!"));
     }
 
-    // ✅ Parse Excel buffer
     const jsonResult = excelToJson(excelFile.buffer);
-
-    // ✅ Get HTML content from buffer
     const htmlTemplate = htmlFile.buffer.toString("utf-8");
-
-    // Optional: Remove this in production
-    // fs.writeFileSync("output.json", JSON.stringify(jsonResult, null, 2), "utf-8");
+    const completedHtmlTemplate = completedHtmlFile.buffer.toString("utf-8");
 
     const batchNumber = parseInt(req.body.batch) || 1;
     const windowSize = parseInt(req.body.window) || 5000;
@@ -141,12 +143,6 @@ export const sendEmail = async (
       const email = staffInfo.email;
       const name = `${staffInfo.name}`;
       try {
-        // In real use: personalize the HTML before sending
-        const personalizedHtml = htmlTemplate.replace("{{name}}", name);
-
-        // Send email using your email service
-        // await sendEmailToUser(email, personalizedHtml, subject);
-
         results.push({ email, name, status: "sent" });
       } catch (error: any) {
         results.push({ email, name, status: "failed", error: error.message });
@@ -161,7 +157,9 @@ export const sendEmail = async (
       results,
       batch,
       window,
-      htmlTemplate
+      htmlTemplate,
+      completedHtmlTemplate,
+      user
     );
     res.status(200).json({ message: "Emails processed", data: results });
   } catch (error: any) {

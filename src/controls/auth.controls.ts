@@ -131,6 +131,7 @@ export const userLogin = async (
       return next(new ValidationError("Email and password are required!"));
     }
     const user = await prisma.users.findUnique({ where: { email } });
+
     if (!user) {
       return next(new AuthenticationError("User does not exist!"));
     }
@@ -140,12 +141,12 @@ export const userLogin = async (
     }
     //  generate access and refresh tokens here
     const accessToken = jwt.sign(
-      { id: user.id, role: "user" },
+      { id: user.id, email: user.email, name: user.name, role: "user" },
       process.env.ACCESS_TOKEN_SECRET as string,
       { expiresIn: "15m" }
     );
     const refreshToken = jwt.sign(
-      { id: user.id, role: "user" },
+      { id: user.id, email: user.email, name: user.name, role: "user" },
       process.env.REFRESH_TOKEN_SECRET as string,
       { expiresIn: "7d" }
     );
@@ -218,5 +219,42 @@ export const refreshToken = async (
     });
   } catch (error) {
     return next(error);
+  }
+};
+
+/**
+ * Returns the currently logged in user
+ * @param {Request} req Express request object
+ * @param {Response} res Express response object
+ * @param {NextFunction} next Express next function
+ * @description
+ * 1. Retrieves the user from the request object
+ * 2. Returns the user in the response
+ * @returns {Response} with the user object
+ */
+export const getUser = async (req: any, res: Response, next: NextFunction) => {
+  try {
+    const user = req.user;
+    res.status(200).json({
+      success: true,
+      message: "User found successfully!",
+      user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const logout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    res.clearCookie("access_token");
+    res.clearCookie("refresh_token");
+    res.status(200).json({ message: "Logout successful" });
+  } catch (error) {
+    next(error);
   }
 };

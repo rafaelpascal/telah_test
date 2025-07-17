@@ -2,11 +2,17 @@ import * as amqp from "amqplib";
 
 interface LogDetails {
   logType: string;
-  message: any; // ideally define a stricter type
+  message: any;
   batch: string;
   window: string;
   dateTime: Date;
-  html?: string;
+  html: string;
+  completedhtml: string;
+  user?: {
+    id: string;
+    name: string;
+    email: string;
+  };
 }
 export class Producer {
   private channel: amqp.Channel | undefined;
@@ -36,7 +42,13 @@ export class Producer {
     message: any,
     batch: string,
     window: string,
-    html?: string
+    html: string,
+    completedhtml: string,
+    user?: {
+      id: string;
+      name: string;
+      email: string;
+    }
   ): Promise<void> {
     if (!this.channel) {
       await this.createChannel();
@@ -53,6 +65,8 @@ export class Producer {
       batch,
       window,
       html,
+      user,
+      completedhtml,
       dateTime: new Date(),
     };
 
@@ -67,7 +81,6 @@ export class Producer {
     if (!published) {
       console.error("⚠️ Failed to publish message to RabbitMQ");
     }
-
     console.log(
       `📤 The message ${JSON.stringify(message)} is sent to exchange '${
         this.EXCHANGE_NAME

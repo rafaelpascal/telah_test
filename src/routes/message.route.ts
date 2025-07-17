@@ -16,6 +16,7 @@ router.post(
   upload.fields([
     { name: "excel", maxCount: 1 },
     { name: "html", maxCount: 1 },
+    { name: "completedhtml", maxCount: 1 },
   ]),
   sendEmail
 );

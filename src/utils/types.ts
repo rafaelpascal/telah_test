@@ -26,7 +26,13 @@ export interface EmailMessagePayload {
   }[];
   batch: string;
   window: string;
-  html?: string; // ✅ add this line
+  html: string;
+  completedhtml: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
 }
 
 export interface EmailJob {
